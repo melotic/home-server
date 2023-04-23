@@ -63,3 +63,16 @@ jobs:
         run: |
           # run all files in /tmp/tests on the machine
           ssh -t ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd /tmp/tests && for f in *.sh; do bash "$f"; done'
+
+      # create a revert PR
+      - name: "Create Revert PR"
+        if: ${{ inputs.revert == true }}
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "revert: bad deployment"
+          title: "revert: bad deployment"
+          delete-branch: true
+          assignees: "melotic"
+          base: main
+          body: |
+            The commit ${{ github.sha }} failed to deploy. This PR reverts the commit.

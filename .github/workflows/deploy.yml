@@ -41,7 +41,7 @@ jobs:
       revert: false
     secrets: inherit
     needs: prepare
-    name: Deploy to morpheus
+    name: morpheus
 
   rollback:
     uses: ./.github/workflows/deploy-template.yml
@@ -50,4 +50,4 @@ jobs:
     secrets: inherit
     needs: deploy
     name: Rollback
-    if: ${{ always() && needs.deploy.result != 'success' && needs.deploy.result != 'skipped'}}
+    if: ${{ needs.deploy.result == 'failure' }}
