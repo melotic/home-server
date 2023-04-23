@@ -1,0 +1,233 @@
+version: "3"
+services:
+  vpn:
+    image: ghcr.io/bubuntux/nordlynx
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN # Required
+    environment:
+      # Review https://github.com/bubuntux/nordvpn#environment-variables
+      - "PRIVATE_KEY=${NORDVPN_PRIVATE_KEY}"
+      - NET_LOCAL=10.0.0.0/24
+        # So it can be accessed within the local network
+        #sysctls:
+        #- net.ipv6.conf.all.disable_ipv6=1  # Recomended if using ipv4 only
+    ports:
+      - 9091:9091
+    restart: ${RESTART}
+
+  plex:
+    image: linuxserver/plex:latest
+    container_name: plex
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - VERSION=latest
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      #- ${BASE_PATH}/plex/config:/config
+      - ${BASE_PATH}/plex2:/config
+      - /mnt:/mnt
+      - /tmp/plex:/transcode #privileged: true
+    ports:
+      - 32400:32400
+    runtime: nvidia
+    restart: ${RESTART}
+
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${BASE_PATH}/transmission/config:/config
+      - ${MEDIA_DIR}/torrents:${MEDIA_DIR}/torrents
+    network_mode: service:vpn
+    restart: ${RESTART}
+    depends_on:
+      - vpn
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${BASE_PATH}/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK_SET=022 #optional
+    volumes:
+      - ${BASE_PATH}/sonarr/config:/config
+      - ${MEDIA_DIR}:${MEDIA_DIR}
+    ports:
+      - 8989:8989
+    restart: ${RESTART}
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${BASE_PATH}/radarr/config:/config
+      - ${MEDIA_DIR}:${MEDIA_DIR}
+    ports:
+      - 7878:7878
+    restart: ${RESTART}
+
+  overseerr:
+    image: lscr.io/linuxserver/overseerr
+    container_name: overseerr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./overseerr:/config
+    ports:
+      - 5055:5055
+    restart: ${RESTART}
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - TZ=${TZ}
+    ports:
+      - 8191:8191
+    restart: ${RESTART}
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    environment:
+      - WATCHTOWER_CLEANUP=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+  cloudflare-ddns:
+    image: favonia/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    restart: ${RESTART}
+    network_mode: host
+    environment:
+      - PGID=${PGID}
+      - PUID=${PUID}
+      - CF_API_TOKEN=${CF_API_TOKEN}
+      - DOMAINS=${FQDN}
+      - PROXIED=false
+
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - URL=${FQDN}
+      - VALIDATION=dns
+      - SUBDOMAINS=wildcard
+      - DNSPLUGIN=cloudflare
+      - EMAIL=${EMAIL}
+    volumes:
+      - ${BASE_PATH}/swag/config:/config
+    ports:
+      - 443:443
+      - 80:80
+    restart: ${RESTART}
+
+  calibre:
+    image: lscr.io/linuxserver/calibre
+    container_name: calibre
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - PASSWORD=${CALIBRE_PW} #optional
+      - CLI_ARGS="–auth-mode=basic" #optional
+    volumes:
+      - ./calibre:/config
+      - ${MEDIA_DIR}/books:/books
+    ports:
+      - 8080:8080
+      - 8081:8081
+    restart: ${RESTART}
+
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web
+    container_name: calibre-web
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - DOCKER_MODS=linuxserver/calibre-web:calibre #optional
+      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
+    volumes:
+      - ./calibre-web:/config
+      - ${MEDIA_DIR}/books:/books
+    ports:
+      - 8083:8083
+    restart: ${RESTART}
+
+  mam_transmission:
+    image: lscr.io/linuxserver/transmission
+    container_name: mam_transmission
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./mam_transmission:/config
+      - ${MEDIA_DIR}/mam_torrents:${MEDIA_DIR}/mam_torrents
+    ports:
+      - 9092:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: ${RESTART}
+
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./readarr:/config
+      - ${MEDIA_DIR}:${MEDIA_DIR}
+    ports:
+      - 8787:8787
+    restart: ${RESTART}
+
+  homer:
+    image: b4bz/homer
+    container_name: homer
+    volumes:
+      - ./homer:/www/assets
+    ports:
+      - 8888:8080
+    environment:
+      - UID=1000
+      - GID=1000
+    restart: ${RESTART}

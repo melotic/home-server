@@ -1,0 +1,62 @@
+on:
+  workflow_call:
+    inputs:
+      revert:
+        description: "Revert to previous commit"
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: morpheus
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Checkout previous commit
+        if: ${{ inputs.revert == 'true' }}
+        run: git checkout HEAD^1
+
+      - name: "Login to Azure CLI"
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: "Download Secrets"
+        run: secrets/download-secrets.sh ${{ secrets.AZURE_KEYVAULT_NAME }}
+
+      - name: Tailscale
+        uses: tailscale/github-action@v1
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: "Install SSH Key"
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+
+      - name: Sync files to remote host
+        run: |
+          rsync -azP ./docker-compose.yml ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:~/docker-services
+          rsync -azP ./.env ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:~/docker-services
+          # sync all files in ./tests to /tmp/tests/
+          rsync -azP ./tests/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/tmp
+
+      - name: Deploy
+        run: |
+          ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd docker-services && docker compose up -d --remove-orphans'
+
+      - name: "Wait for alarms to update"
+        run: sleep 120
+
+      - name: "Run tests"
+        run: |
+          # run all files in /tmp/tests on the machine
+          ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd /tmp/tests && for f in *.sh; do bash "$f"; done'

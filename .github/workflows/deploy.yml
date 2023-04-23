@@ -1,0 +1,53 @@
+name: Deploy
+
+permissions:
+  id-token: write
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TERM: xterm-256color
+
+jobs:
+  # we don't use this to share secrets, we just want to make sure that the secrets are valid
+  # before we deploy.
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: "Login to Azure CLI"
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: "Download Secrets"
+        run: secrets/download-secrets.sh ${{ secrets.AZURE_KEYVAULT_NAME }}
+
+      - name: "Check Secrets"
+        run: secrets/check-secrets.sh
+
+  deploy:
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      revert: false
+    secrets: inherit
+    needs: prepare
+    name: Deploy to morpheus
+
+  rollback:
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      revert: true
+    secrets: inherit
+    needs: deploy
+    name: Rollback
+    if: ${{ always() && needs.deploy.result != 'success' }}
