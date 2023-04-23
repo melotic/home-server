@@ -30,10 +30,10 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: "Download Secrets"
-        run: secrets/download-secrets.sh ${{ secrets.AZURE_KEYVAULT_NAME }}
+        run: ./secrets/download-secrets.sh ${{ secrets.AZURE_KEYVAULT_NAME }}
 
       - name: "Check Secrets"
-        run: secrets/check-secrets.sh
+        run: ./secrets/check-secrets.sh
 
   deploy:
     uses: ./.github/workflows/deploy-template.yml
