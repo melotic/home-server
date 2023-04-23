@@ -9,6 +9,9 @@ on:
     branches:
       - main
 
+concurrency:
+  group: morpheus
+
 env:
   TERM: xterm-256color
 
