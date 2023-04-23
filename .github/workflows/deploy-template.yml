@@ -54,7 +54,7 @@ jobs:
 
       - name: Deploy
         run: |
-          ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd docker-services && docker compose up -d --remove-orphans'
+          ssh -t ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd docker-services && docker compose up -d --remove-orphans'
 
       - name: "Wait for alarms to update"
         run: sleep 120
@@ -62,4 +62,4 @@ jobs:
       - name: "Run tests"
         run: |
           # run all files in /tmp/tests on the machine
-          ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd /tmp/tests && for f in *.sh; do bash "$f"; done'
+          ssh -t ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd /tmp/tests && for f in *.sh; do bash "$f"; done'
