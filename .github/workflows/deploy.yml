@@ -53,4 +53,4 @@ jobs:
     secrets: inherit
     needs: deploy
     name: Rollback
-    if: ${{ needs.deploy.result == 'failure' }}
+    if: ${{ always() && needs.deploy.result == 'failure' }}
