@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 2
 
       - name: Checkout previous commit
-        if: ${{ inputs.revert == 'true' }}
+        if: ${{ inputs.revert == true }}
         run: git checkout HEAD^1
 
       - name: "Login to Azure CLI"
