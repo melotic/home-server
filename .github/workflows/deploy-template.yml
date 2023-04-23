@@ -22,7 +22,7 @@ jobs:
 
       - name: Checkout previous commit
         if: ${{ inputs.revert == true }}
-        run: git checkout HEAD^1
+        run: git revert HEAD~1 --no-edit
 
       - name: "Login to Azure CLI"
         uses: azure/login@v1
@@ -54,7 +54,7 @@ jobs:
 
       - name: Deploy
         run: |
-          ssh -t ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd docker-services && docker compose up -d --remove-orphans'
+          ssh -tt ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd docker-services && docker compose up -d --remove-orphans'
 
       - name: "Wait for alarms to update"
         run: sleep 330 # the http checks are over 5 min intervals.
@@ -62,7 +62,7 @@ jobs:
       - name: "Run tests"
         run: |
           # run all files in /tmp/tests on the machine
-          ssh -t ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd /tmp/tests && for f in *.sh; do bash "$f"; done'
+          ssh -tt ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd /tmp/tests && for f in *.sh; do bash "$f"; done'
 
       # create a revert PR
       - name: "Create Revert PR"
