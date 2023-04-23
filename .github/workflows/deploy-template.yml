@@ -7,6 +7,9 @@ on:
         required: false
         default: false
 
+env:
+  TERM: xterm-256color
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -47,7 +50,7 @@ jobs:
           rsync -azP ./docker-compose.yml ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:~/docker-services
           rsync -azP ./.env ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:~/docker-services
           # sync all files in ./tests to /tmp/tests/
-          rsync -azP ./tests/ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/tmp
+          rsync -azP ./tests ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/tmp
 
       - name: Deploy
         run: |
