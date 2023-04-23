@@ -219,3 +219,15 @@ services:
     ports:
       - 8787:8787
     restart: ${RESTART}
+
+  homer:
+    image: b4bz/homer
+    container_name: homer
+    volumes:
+      - ./homer:/www/assets
+    ports:
+      - 8888:8080
+    environment:
+      - UID=1000
+      - GID=1000
+    restart: ${RESTART}
