@@ -134,7 +134,7 @@ services:
       - PUID=${PUID}
       - CF_API_TOKEN=${CF_API_TOKEN}
       - DOMAINS=${FQDN}
-      - PROXIED=false
+      - PROXIED=true
 
   swag:
     image: lscr.io/linuxserver/swag
