@@ -11,5 +11,5 @@ azure_security_keyvault = "0.11.0"
 clap = { version = "4.2.4", features = ["derive"] }
 color-eyre = "0.6.2"
 futures = "0.3.28"
-tokio = { version = "1.27.0", features = ["full"] }
+tokio = { version = "1.28.0", features = ["full"] }
 url = "2.3.1"
