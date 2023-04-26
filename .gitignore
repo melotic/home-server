@@ -1,2 +1,6 @@
 # secrets be gone!
 .env
+
+# Added by cargo
+
+/target
