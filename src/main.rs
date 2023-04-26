@@ -77,7 +77,7 @@ async fn sync_secrets(client: SecretClient) -> Result<()> {
         let value = parts.next().ok_or_else(|| eyre!("no value"))?;
 
         let client = client.clone();
-        let key = key.to_owned();
+        let key = key.replace('_', "-").to_owned();
         let value = value.to_owned();
 
         let task = tokio::task::spawn(async move {
