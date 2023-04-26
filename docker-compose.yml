@@ -167,7 +167,7 @@ services:
       - PASSWORD=${CALIBRE_PW} #optional
       - CLI_ARGS="–auth-mode=basic" #optional
     volumes:
-      - ./calibre:/config
+      - ${BASE_PATH}/calibre:/config
       - ${MEDIA_DIR}/books:/books
     ports:
       - 8080:8080
@@ -184,7 +184,7 @@ services:
       - DOCKER_MODS=linuxserver/calibre-web:calibre #optional
       - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
     volumes:
-      - ./calibre-web:/config
+      - ${BASE_PATH}/calibre-web:/config
       - ${MEDIA_DIR}/books:/books
     ports:
       - 8083:8083
@@ -198,7 +198,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./mam_transmission:/config
+      - ${BASE_PATH}/mam_transmission:/config
       - ${MEDIA_DIR}/mam_torrents:${MEDIA_DIR}/mam_torrents
     ports:
       - 9092:9091
@@ -214,7 +214,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./readarr:/config
+      - ${BASE_PATH}/readarr:/config
       - ${MEDIA_DIR}:${MEDIA_DIR}
     ports:
       - 8787:8787
@@ -224,10 +224,31 @@ services:
     image: b4bz/homer
     container_name: homer
     volumes:
-      - ./homer:/www/assets
+      - ${BASE_PATH}/homer:/www/assets
     ports:
       - 8888:8080
     environment:
-      - UID=1000
-      - GID=1000
+      - UID=${PUID}
+      - GID=${PGID}
     restart: ${RESTART}
+
+  mealie:
+    container_name: mealie
+    image: hkotel/mealie:latest
+    restart: always
+    ports:
+      - 9925:80
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+
+      # Default Recipe Settings
+      RECIPE_PUBLIC: 'true'
+      RECIPE_SHOW_NUTRITION: 'true'
+      RECIPE_SHOW_ASSETS: 'true'
+      RECIPE_LANDSCAPE_VIEW: 'true'
+      RECIPE_DISABLE_COMMENTS: 'false'
+      RECIPE_DISABLE_AMOUNT: 'false'
+    volumes:
+      - ${BASE_PATH}/mealie/data/:/app/data

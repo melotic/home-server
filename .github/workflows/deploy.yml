@@ -74,7 +74,7 @@ jobs:
 
       - name: Deploy
         run: |
-          ssh -tt ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd docker-services && docker compose up -d --remove-orphans'
+          ssh ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} 'cd docker-services && docker compose up -d --remove-orphans'
 
       - name: "Wait for alarms to update"
         run: sleep 330 # the http checks are over 5 min intervals.
