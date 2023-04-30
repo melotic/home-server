@@ -150,6 +150,7 @@ services:
       - SUBDOMAINS=wildcard
       - DNSPLUGIN=cloudflare
       - EMAIL=${EMAIL}
+      - DOCKER_MODS=linuxserver/mods:swag-cloudflare-real-ip
     volumes:
       - ${BASE_PATH}/swag/config:/config
     ports:
