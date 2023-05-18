@@ -8,7 +8,7 @@ services:
     environment:
       # Review https://github.com/bubuntux/nordvpn#environment-variables
       - "PRIVATE_KEY=${NORDVPN_PRIVATE_KEY}"
-      - NET_LOCAL=10.0.0.0/24
+      - NET_LOCAL=10.0.0.0/8,100.64.0.0/10
         # So it can be accessed within the local network
         #sysctls:
         #- net.ipv6.conf.all.disable_ipv6=1  # Recomended if using ipv4 only
