@@ -55,7 +55,7 @@ jobs:
         run: ./secrets/check-secrets.sh
 
       - name: Tailscale
-        uses: tailscale/github-action@cc6818dd6930277a6e4b5d249e32ba2f4cf6ea32 # v1
+        uses: tailscale/github-action@65cdd9a05d7ebe4ef4e8c70141f5d84e1cd4cab4 # v2
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
 
