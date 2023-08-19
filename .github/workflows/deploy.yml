@@ -6,10 +6,6 @@ permissions:
 
 on:
   push:
-    # we only care about .sh and .yml files pushes to main
-    paths:
-      - "**.sh"
-      - "**.yml"
     branches:
       - main
 
