@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 azure_identity = "0.14.0"
-azure_security_keyvault = "0.13.0"
+azure_security_keyvault = "0.14.0"
 clap = { version = "4.3.24", features = ["derive"] }
 color-eyre = "0.6.2"
 futures = "0.3.28"
