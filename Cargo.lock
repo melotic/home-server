@@ -120,32 +120,6 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "azure_core"
-version = "0.13.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86b0f0eea648347e40f5f7f7e6bfea4553bcefad0fbf52044ea339e5ce3aba61"
-dependencies = [
- "async-trait",
- "base64 0.21.0",
- "bytes",
- "dyn-clone",
- "futures",
- "getrandom 0.2.9",
- "http-types",
- "log",
- "paste",
- "pin-project",
- "rand 0.8.5",
- "reqwest",
- "rustc_version",
- "serde",
- "serde_json",
- "time",
- "url",
- "uuid",
-]
-
-[[package]]
-name = "azure_core"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2331555a3618a32516c6172a63e9fec4af0edb43c6fcfeb5303a0716fc34498b"
@@ -178,7 +152,7 @@ checksum = "f6f12ef55a5ca0701205f8d81384c2409292533d09686897f1dda16380158875"
 dependencies = [
  "async-lock",
  "async-trait",
- "azure_core 0.14.0",
+ "azure_core",
  "fix-hidden-lifetime-bug",
  "futures",
  "log",
@@ -193,12 +167,12 @@ dependencies = [
 
 [[package]]
 name = "azure_security_keyvault"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5494ed16a9aab7ff5daed1fb3a1af3abdb513d56d5dd876ad48020f708b66a21"
+checksum = "89d9717ca6d5b7a4f3368261afa517551a271c920cb3349434fb08b01e77ceec"
 dependencies = [
  "async-trait",
- "azure_core 0.13.0",
+ "azure_core",
  "const_format",
  "futures",
  "serde",
