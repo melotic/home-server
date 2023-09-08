@@ -144,14 +144,40 @@ dependencies = [
 ]
 
 [[package]]
-name = "azure_identity"
-version = "0.14.0"
+name = "azure_core"
+version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6f12ef55a5ca0701205f8d81384c2409292533d09686897f1dda16380158875"
+checksum = "1f20eb684aea745292c540173304383c9cba9697d1c31d307620a57d6f878fa9"
+dependencies = [
+ "async-trait",
+ "base64 0.21.0",
+ "bytes",
+ "dyn-clone",
+ "futures",
+ "getrandom 0.2.9",
+ "http-types",
+ "log",
+ "paste",
+ "pin-project",
+ "rand 0.8.5",
+ "reqwest",
+ "rustc_version",
+ "serde",
+ "serde_json",
+ "time",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "azure_identity"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e15ab021e72fa7196fa8406951f7e85a3476e4968568b2ce3866d2ceed831655"
 dependencies = [
  "async-lock",
  "async-trait",
- "azure_core",
+ "azure_core 0.15.0",
  "fix-hidden-lifetime-bug",
  "futures",
  "log",
@@ -171,7 +197,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "89d9717ca6d5b7a4f3368261afa517551a271c920cb3349434fb08b01e77ceec"
 dependencies = [
  "async-trait",
- "azure_core",
+ "azure_core 0.14.0",
  "const_format",
  "futures",
  "serde",
