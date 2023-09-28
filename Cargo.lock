@@ -144,15 +144,40 @@ dependencies = [
 ]
 
 [[package]]
-name = "azure_identity"
-version = "0.15.0"
+name = "azure_core"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e15ab021e72fa7196fa8406951f7e85a3476e4968568b2ce3866d2ceed831655"
+checksum = "8e29286b9edfdd6f2c7e9d970bb5b015df8621258acab9ecfcea09b2d7692467"
+dependencies = [
+ "async-trait",
+ "base64 0.21.0",
+ "bytes",
+ "dyn-clone",
+ "futures",
+ "getrandom 0.2.9",
+ "http-types",
+ "log",
+ "paste",
+ "pin-project",
+ "rand 0.8.5",
+ "reqwest",
+ "rustc_version",
+ "serde",
+ "serde_json",
+ "time",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "azure_identity"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5299c8772ae7a98e8939137e9593d371fd3ade9bcf60834ed3bdc67feaf9e50e"
 dependencies = [
  "async-lock",
  "async-trait",
- "azure_core",
- "fix-hidden-lifetime-bug",
+ "azure_core 0.16.0",
  "futures",
  "log",
  "oauth2",
@@ -171,7 +196,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4ad719cf9f226fde9519a025b67c3b3bd93da4819e5355b95beceef94eb29a2"
 dependencies = [
  "async-trait",
- "azure_core",
+ "azure_core 0.15.0",
  "const_format",
  "futures",
  "serde",
@@ -541,26 +566,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e51093e27b0797c359783294ca4f0a911c270184cb10f85783b118614a1501be"
 dependencies = [
  "instant",
-]
-
-[[package]]
-name = "fix-hidden-lifetime-bug"
-version = "0.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4ae9c2016a663983d4e40a9ff967d6dcac59819672f0b47f2b17574e99c33c8"
-dependencies = [
- "fix-hidden-lifetime-bug-proc_macros",
-]
-
-[[package]]
-name = "fix-hidden-lifetime-bug-proc_macros"
-version = "0.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4c81935e123ab0741c4c4f0d9b8377e5fb21d3de7e062fa4b1263b1fbcba1ea"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
 ]
 
 [[package]]
@@ -1657,6 +1662,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cd0cbfecb4d19b5ea75bb31ad904eb5b9fa13f21079c3b92017ebdf4999a5890"
 dependencies = [
  "itoa",
+ "js-sys",
  "libc",
  "num_threads",
  "serde",
