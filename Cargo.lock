@@ -121,32 +121,6 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "azure_core"
-version = "0.16.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e29286b9edfdd6f2c7e9d970bb5b015df8621258acab9ecfcea09b2d7692467"
-dependencies = [
- "async-trait",
- "base64 0.21.0",
- "bytes",
- "dyn-clone",
- "futures",
- "getrandom 0.2.9",
- "http-types",
- "log",
- "paste",
- "pin-project",
- "rand 0.8.5",
- "reqwest",
- "rustc_version",
- "serde",
- "serde_json",
- "time",
- "url",
- "uuid",
-]
-
-[[package]]
-name = "azure_core"
 version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ccd63c07d1fbfb3d4543d7ea800941bf5a30db1911b9b9e4db3b2c4210a434f"
@@ -179,7 +153,7 @@ checksum = "8bd7ea32ca7eb66ff4757f83baac702ff11d469e5de365b6bc6f79f9c25d3436"
 dependencies = [
  "async-lock",
  "async-trait",
- "azure_core 0.17.0",
+ "azure_core",
  "futures",
  "log",
  "oauth2",
@@ -194,12 +168,12 @@ dependencies = [
 
 [[package]]
 name = "azure_security_keyvault"
-version = "0.16.0"
+version = "0.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "967d968eaff27a740e0522a2979917689e771d4f6ad9b2602e22c77b6a619c47"
+checksum = "2304ad09313aef2847451c3ac10a160922afec260e93e752b70c7a458d4007f1"
 dependencies = [
  "async-trait",
- "azure_core 0.16.0",
+ "azure_core",
  "futures",
  "serde",
  "serde_json",
