@@ -148,9 +148,9 @@ dependencies = [
 
 [[package]]
 name = "azure_identity"
-version = "0.18.0"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "361ac687291da76f6498823ce11757c3fa55fe4e5e913d92b1b264f285bc5edc"
+checksum = "9e1eacc4f7fb2a73d57c39139d0fc3aed78435606055779ddaef4b43cdf919a8"
 dependencies = [
  "async-lock",
  "async-trait",
