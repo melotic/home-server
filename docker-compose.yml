@@ -233,26 +233,6 @@ services:
       - GID=${PGID}
     restart: ${RESTART}
 
-  mealie:
-    container_name: mealie
-    image: hkotel/mealie:latest
-    restart: always
-    ports:
-      - 9925:80
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-
-      # Default Recipe Settings
-      RECIPE_PUBLIC: 'true'
-      RECIPE_SHOW_NUTRITION: 'true'
-      RECIPE_SHOW_ASSETS: 'true'
-      RECIPE_LANDSCAPE_VIEW: 'true'
-      RECIPE_DISABLE_COMMENTS: 'false'
-      RECIPE_DISABLE_AMOUNT: 'false'
-    volumes:
-      - ${BASE_PATH}/mealie/data/:/app/data
 
   wireguard:
     image: lscr.io/linuxserver/wireguard:latest
@@ -280,3 +260,14 @@ services:
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
+
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    volumes:
+      - ${BASE_PATH}/uptime-kuma:/app/data
+    ports:
+      - 3001:3001
+    restart: always
+
