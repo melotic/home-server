@@ -228,9 +228,7 @@ services:
       - ${BASE_PATH}/homer:/www/assets
     ports:
       - 8888:8080
-    environment:
-      - UID=${PUID}
-      - GID=${PGID}
+    user: ${PGUID}:${PGID}
     restart: ${RESTART}
 
 
