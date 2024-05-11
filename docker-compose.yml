@@ -260,12 +260,16 @@ services:
     restart: unless-stopped
 
 
-  uptime-kuma:
-    image: louislam/uptime-kuma:1
-    container_name: uptime-kuma
+  tautulli:
+    image: ghcr.io/tautulli/tautulli
+    container_name: tautulli
+    restart: unless-stopped
     volumes:
-      - ${BASE_PATH}/uptime-kuma:/app/data
+      - ${BASE_PATH}:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     ports:
-      - 3001:3001
-    restart: always
+      - 8181:8181
 
