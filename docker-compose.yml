@@ -129,9 +129,8 @@ services:
     container_name: cloudflare-ddns
     restart: ${RESTART}
     network_mode: host
+    user: "${PUID}:${PGID}"
     environment:
-      - PGID=${PGID}
-      - PUID=${PUID}
       - CF_API_TOKEN=${CF_API_TOKEN}
       - DOMAINS=${FQDN}
       - PROXIED=false
