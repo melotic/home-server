@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-azure_identity = "0.21.0"
+azure_identity = "0.22.0"
 azure_security_keyvault = "0.21.0"
 clap = { version = "4.5.4", features = ["derive"] }
 color-eyre = "0.6.3"
