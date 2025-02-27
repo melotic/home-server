@@ -34,7 +34,7 @@ jobs:
         uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1.0.7
         with:
           toolchain: stable
-      - uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
+      - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: |
             ~/.cargo/bin/
